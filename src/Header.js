@@ -7,7 +7,7 @@ function Header() {
         <nav className="customsd">
           <div className="customsd">
             <a className="customsd" href="#">
-             Taskimanager
+             Taskmanager
             </a>
           </div>
           <div className="nav-right">

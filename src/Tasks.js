@@ -1,9 +1,12 @@
  import React from 'react';
  import Task from './Task';
+ import AddTask from './AddTask';
  import App from './App';
  import { useState } from "react";
  import { useEffect } from "react";
- function Tasks({tasks, setTasks, onTglStatus, showTaskEdit, setShowTaskEdit, onSaveTask, onHandleSubmit, onShowTaskEdit, id}) {
+ import TaskDataService from "./services/task.service.js";
+ 
+function Tasks({tasks, desc, date, remarks, setTasks, onTglStatus, showTaskEdit, setShowTaskEdit, onSaveTask, onHandleSubmit, onShowTaskEdit, id}) {
   
 const [searchTerm, setSearchTerm] = useState("");
 const [searchResults, setSearchResults] = useState([]);
@@ -12,6 +15,40 @@ const onHandleChangeInput = (e) => {
   setSearchTerm(e.target.value);
 };
 
+function viewRenderer (tasks, searchTerm) {
+  console.log(`View Renderer`, tasks)
+
+  let viewObjects = [];
+
+  tasks.map( (task, index) => {
+    console.log(`Inner Task`, task, index);
+    console.log(task['date']);
+
+    if( task.description.toLowerCase().includes(searchTerm) ) {
+      viewObjects.push(
+        <Task task={task} setTasks={setTasks} key={task.id} index={index} onTglStatus={onTglStatus} setShowTaskEdit={setShowTaskEdit} showTaskEdit={showTaskEdit} onSaveTask={onSaveTask} onHandleChangeInput={onHandleChangeInput} onHandleSubmit={onHandleSubmit} onShowTaskEdit = {onShowTaskEdit} tasks={tasks} id={id} />
+      );
+    }
+  });
+
+  console.log(`View Objects`, viewObjects);
+
+  return (
+    <>
+      <div><p>Total Tasks - </p>{viewObjects.length}</div>
+    </>
+  )
+
+  /*
+  tasks !== undefined && tasks.length > 0 && tasks.map((task, index) => (
+task.desc.toLowerCase().includes(searchTerm) && <Task task={task} setTasks={setTasks} key={task.id} index={index} onTglStatus={onTglStatus} setShowTaskEdit={setShowTaskEdit} showTaskEdit={showTaskEdit} onSaveTask={onSaveTask} onHandleChangeInput={onHandleChangeInput} onHandleSubmit={onHandleSubmit} onShowTaskEdit = {onShowTaskEdit} tasks={tasks} id={id} />
+      ))
+      */
+}
+
+useEffect(() => {
+  console.log(`Tasks List Function`, tasks);
+}, [])
 
 useEffect(() => {
   const results = tasks.filter(taskSearch =>
@@ -26,9 +63,11 @@ useEffect(() => {
       
       </div>
       <div>
-      {tasks.map((task, index) => (
-searchTerm && <Task task={task} setTasks={setTasks} key={task.id} index={index} onTglStatus={onTglStatus} setShowTaskEdit={setShowTaskEdit} showTaskEdit={showTaskEdit} onSaveTask={onSaveTask} onHandleChangeInput={onHandleChangeInput} onHandleSubmit={onHandleSubmit} onShowTaskEdit = {onShowTaskEdit} tasks={tasks} id={id} />
-      ))}
+        {
+            tasks !== undefined && tasks.length > 0 && tasks.map((task, index) => (
+              task.desc.toLowerCase().includes(searchTerm) && <Task task={task} setTasks={setTasks} key={task.id} index={index} onTglStatus={onTglStatus} setShowTaskEdit={setShowTaskEdit} showTaskEdit={showTaskEdit} onSaveTask={onSaveTask} onHandleChangeInput={onHandleChangeInput} onHandleSubmit={onHandleSubmit} onShowTaskEdit = {onShowTaskEdit} tasks={tasks} id={id} />
+                    ))
+        }
       <div className="col-12"></div>
       <input
         type="text"

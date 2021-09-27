@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import EditTask from './EditTask';
 import DeleteTask from './DeleteTask';
 import { useState } from 'react';
+import TaskDataService from "./services/task.service.js";
+import AddTask from './AddTask';
 
-function Task({ task, setTasks, onTglStatus, showTaskEdit, setShowTaskEdit, onHandleChangeInput, onHandleSubmit, onShowTaskEdit, setDesc, setDate, onDeleteTask, handleDelete, tasks, id }) {
+
+function Task({ task, setTasks, desc, date, remarks, onTglStatus, showTaskEdit, setShowTaskEdit, onHandleChangeInput, onHandleSubmit, onShowTaskEdit, setDesc, setDate, setRemarks, onDeleteTask, handleDelete, tasks, id }) {
   const [editTask, setEditTask] = useState(undefined)
   const [deleteTask, setDeleteTask] = useState(undefined)
+  
   {
 
-  const onHandleEdit =(desc, date)=>{
+  const onHandleEdit =(desc, date, remarks)=>{
     setEditTask(
       //      { desc: task.dec, date: task.date, id: tasks.length, complete: false },
       //      ...tasks,
@@ -17,8 +21,9 @@ function Task({ task, setTasks, onTglStatus, showTaskEdit, setShowTaskEdit, onHa
         //  task.map((editTask) => {
                task.desc = desc,
                task.date = date,
+               task.remarks = remarks,
                 // return editTask
-                console.log("I am here")
+                console.log('Edit Task', desc)
            
           );
     setEditTask(undefined)
@@ -42,22 +47,10 @@ function Task({ task, setTasks, onTglStatus, showTaskEdit, setShowTaskEdit, onHa
 
 
   return (
+    
     <div className="card text-left" >
-      <button className="button-blue" 
-      onClick={() => 
-      {
-        setEditTask(task); setShowTaskEdit(!showTaskEdit);}}>
-        {/* {!showTaskEdit && "Edit Task"}
-        {showTaskEdit && "➖"*/} Edit Task</button> 
-      {editTask && showTaskEdit && <EditTask onHandleEdit={onHandleEdit} task={{}} />}
-      {/* <button className="button" onClick={() => handleDelete(task)}> Delete Task </button> */}
-      
-     {/* deleteTask && /*}
-
-      {/* onHandleSubmit={onHandleSubmit} */}
-
       <div className="row">
-        <div className="col-10">
+        <div className="col-7">
           <h4>{task.desc}</h4>
           <div className="task-meta">
             <img
@@ -69,7 +62,7 @@ function Task({ task, setTasks, onTglStatus, showTaskEdit, setShowTaskEdit, onHa
           </div>
         </div>
 
-        <div className="col-2 is-center">
+        <div>
           {/* <button className="button icon-only clear">
             <img
               src="https://icongr.am/feather/check-circle.svg?size=24&color=11d054"
@@ -80,11 +73,27 @@ function Task({ task, setTasks, onTglStatus, showTaskEdit, setShowTaskEdit, onHa
             {task.complete && "✅"}
             {!task.complete && "⬜"}
           </button>
+          <button className="button-blue" 
+      onClick={() => 
+      {
+        setEditTask(task); setShowTaskEdit(!showTaskEdit);}}>
+        {/* {!showTaskEdit && "Edit Task"}
+        {showTaskEdit && "➖"*/} Edit Task</button> 
+      {editTask && showTaskEdit && <EditTask onHandleEdit={onHandleEdit} task={{}} />}
         </div>
-        <div className="col-12">
+       
+      </div>
+      
+      {/* <button className="button" onClick={() => handleDelete(task)}> Delete Task </button> */}
+      
+     {/* deleteTask && /*}
+
+      {/* onHandleSubmit={onHandleSubmit} */}
+
+        <div>
           <p>{task.remarks}</p>
         </div>
-      </div>
+        
       <DeleteTask /*onDeleteTask={onDeleteTask}*/ tasks={tasks} id={id} task={task} setTasks={setTasks}/>
     </div>
   )};

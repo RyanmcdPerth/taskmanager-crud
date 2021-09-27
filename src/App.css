@@ -39,26 +39,28 @@
 
 .customsd
 {
-color: skyblue;
-padding-left: 0.5em;
-margin-left: 1.5em;
-text-align: left;
-font-size:xx-large;
-font-weight: 1000;
-font-style: oblique;
+color: rgb(18, 15, 185);
+text-align: center;
+font-size: xx-large;
+font-weight: 3000;
+font-style: unset;
 
 }
 .button-red
 {
 background-color: red;
 color: white;
-
-
 }
-
 .button-blue 
 {
 background-color: royalblue;
 color:ivory;
+margin-right: 5px;
+justify-content: left;
+}
+.row
+{
+display: flex;
+flex-direction: column-reverse;
 }
 

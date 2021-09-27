@@ -1,16 +1,19 @@
-import './App.css';
-import React from 'react';
 // import Toggle from './Toggle';
 // import Counter from './Counter';
 // import Options from './Tasks';
 // import Action from './Action';
 // import AddOptions from './AddOptions';
+
+import './App.css';
+import React from 'react';
 import Header from "./Header";
 import Tasks from "./Tasks";
 import AddTask from "./AddTask";
 import EditTask from './EditTask';
 import { useState } from "react";
 import { useEffect } from "react";
+import TaskDataService from "./services/task.service.js";
+
 // function usePrevious(value) {
 //   const ref = useRef();
 //   useEffect(() => {
@@ -24,16 +27,12 @@ import { useEffect } from "react";
 //   const prevCount = usePrevious(count)
 // }
 
-
 function App() {
-  const [tasks, setTasks] = useState([
-    { desc: "Learn React", id: '0', date: "2021-01-03 10:00", status: "Complete", remarks: "this is a test" },
-    // { desc: "Profit", id: '1', date: "2021-01-05 15:00", status: "Open", remarks: "this is a test2" },
-  ]);
+  const [tasks, setTasks] = useState([]);
 const index = tasks.length;
 
   const onTglStatus = (task) => {
-    console.log("completing task");
+    console.log("TASK COMPLETED");
     setTasks(
       tasks.map((chkTask) => {
         chkTask.complete =
@@ -42,6 +41,30 @@ const index = tasks.length;
       })
     );
   };
+  
+  useEffect(() => {
+    listTasks();
+  },[]);  
+
+  useEffect( () => {
+    console.log(`UPDATE TASKS`, tasks, typeof(tasks))
+  }, [tasks]);
+  
+  const listTasks = () => {
+    try {
+   TaskDataService.getAll()
+   .then(response => {
+     console.log(`LIST TASK FUNCTION`, response);
+     setTasks(response.data);
+     console.log(`TASKS`, tasks)
+   })
+  }
+  catch(err)
+  {
+   console.log(`ERROR MESSAGE LIST TASKS`, err);
+  }
+  };
+
 
   const onShowTaskEdit = (task) => {
       setTasks(
@@ -52,26 +75,22 @@ const index = tasks.length;
       );
   };
 
-
-
-
-  // const [count, setCount] = useState(1);
-
   const [showTaskEdit, setShowTaskEdit] = useState(false);
-
   const [showTaskAdd, setShowTaskAdd] = useState(false);
 
-  // const handleCount = (count) => {
-  //   setCount = count++;
-  // }
+  const onSaveTask = (desc, date, remarks) => {
+    console.log(`SAVE TASKS`, desc, date, remarks);
+    console.log('onSaveTask', tasks, typeof(tasks))
+    // setTasks([
+    //   { desc: desc, date: date, id: tasks.length, complete: false, remarks: remarks },
+    //   ...tasks,
+    // ]);
 
+    let temp = tasks;
+    console.log(`TEMPORARY TASKS`, temp, typeof(temp));
+    temp.push({desc: desc, date: date, id: tasks.length, complete: false, remarks: remarks });
+    setTasks(temp);
 
-  const onSaveTask = ({ desc, date }) => {
-    console.log("saving tasks");
-    setTasks([
-      { desc: desc, date: date, id: tasks.length, complete: false },
-      ...tasks,
-    ]);
     setShowTaskAdd(!showTaskAdd)
     // tasks.map((taskId) => { taskId.id = taskId;
     // return taskId; })
